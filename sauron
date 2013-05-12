@@ -1,0 +1,20 @@
+#! /bin/sh
+if [ x$sauron_level = x ]; then
+    sauron_level=3
+fi
+if [ $# -le 1 ]; then
+    from=shell
+    msg=$1
+else
+    from=$1
+    shift
+    msg=$@
+fi
+
+DISPLAY=:0                                        \
+    dbus-send --session          	          \
+    --dest="org.gnu.Emacs"	                  \
+    --type=method_call                            \
+    "/org/gnu/Emacs/Sauron"                       \
+    "org.gnu.Emacs.Sauron.AddMsgEvent"            \
+    string:$from uint32:$sauron_level string:"$msg"
