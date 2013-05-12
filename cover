@@ -1,0 +1,35 @@
+#! /bin/sh
+
+set -e
+
+usage() {
+    echo usage: $0 [-h] [-d output_dir] url
+}
+
+tmp=`mktemp /tmp/output.XXXX.jpg`
+dir=.
+
+while getopts d:h flag; do
+    case $flag in
+        d)
+            dir=$OPTARG
+            ;;
+        h)
+            usage;
+            exit 0
+            ;;
+        ?)
+            usage 1;
+            exit 1
+            ;;
+    esac
+done
+
+shift $(( OPTIND - 1 ));
+
+curl -o $tmp $1
+convert -resize 500x500 $tmp $dir/cover_large.jpg
+convert -resize 200x200 $tmp $dir/cover_med.jpg
+convert -resize 100x100 $tmp $dir/cover_little.jpg
+
+rm -f $tmp
