@@ -1,0 +1,3 @@
+#! /bin/sh
+
+java -classpath "/home/vash/dctc/dist/*:/home/vash/dctc/lib/ivy/core/*:/home/vash/dctc/lib/third/*" com.dataiku.dctc.Main "$@"
