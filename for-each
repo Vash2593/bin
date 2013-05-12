@@ -1,0 +1,39 @@
+#! /bin/sh
+
+# Launch command for each sub directory listed in the file.
+
+usage ()
+{
+    echo "usage: $0 file sub-command [sub-command argument]" >&2
+    exit $1
+}
+
+create_dir ()
+{
+    echo "Create dir $1"
+    mkdir -p $1
+}
+
+# Get the file, list of sub-folders to visit.
+if [ "x$1" != "x" ]; then
+    FILE=$1
+else
+    usage 1
+fi
+shift
+
+# Get the command to launch in each sub-folders
+if [ "x$1" != "x" ]; then
+    COMMAND=$1
+else
+    usage $1
+fi
+shift
+
+pwd=`pwd` # Get the initial location
+while read line; do
+    if ! [ -d $line ]; then
+        create_dir $line
+    fi
+    eval $COMMAND $@
+done < $FILE
